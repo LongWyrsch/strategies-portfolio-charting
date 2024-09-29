@@ -33,7 +33,9 @@ const SingleChart = () => {
 		let data = null
 		try {
 			const response = await fetch(
-				`https://localhost:7248/api/GetChartTradingDetails?symbol=${adjustedSymbol}&resolution=${adjustedResolution}&strategy=${strategyRef.current}&outlierRemovalMethod=${outlierRemovalMethod}`
+				`${import.meta.env.BACKEND_URL}/api/GetChartTradingDetails?symbol=${adjustedSymbol}&resolution=${adjustedResolution}&strategy=${
+					strategyRef.current
+				}&outlierRemovalMethod=${outlierRemovalMethod}`
 			)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
@@ -174,7 +176,12 @@ const SingleChart = () => {
 			<div className={styles.results}>
 				<StrategyResults results={results} />
 			</div>
-			{!traces && <div className='loading'>Loading all candles since 2017 <br />This can take 10 seconds...</div>}
+			{!traces && (
+				<div className="loading">
+					Loading all candles since 2017 <br />
+					This can take 10 seconds...
+				</div>
+			)}
 			<MyPlot height={'700px'} graphData={graphData} layout={layout} config={config} logScale={logScale} plotRelayoutHandler={plotRelayoutHandler} plotTitle={plotTitle} />
 			<div className="toggles">
 				<label>

@@ -9,13 +9,13 @@ const CompareResultsSelectStrategies = () => {
 	const [outlierRemovalMethod, setOutlierRemovalMethod] = useState(OutlierRemovalMethods.None)
 	const [results, setResults] = useState(null)
 	const [strategyIds, setStrategyIds] = useState([1])
-	const strategyIdsInputRef = useRef("1")
+	const strategyIdsInputRef = useRef('1')
 	const [warning, setWarning] = useState(null)
 
 	const fetchData = async () => {
 		let data = null
 		try {
-			const response = await fetch(`https://localhost:7248/api/GetSelectResults?strategyIds=${strategyIds.join(',')}`)
+			const response = await fetch(`${import.meta.env.BACKEND_URL}/api/GetSelectResults?strategyIds=${strategyIds.join(',')}`)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
 			data = await response.json()
@@ -23,7 +23,7 @@ const CompareResultsSelectStrategies = () => {
 			console.error(`Error fetching data: ${error}`)
 			setWarning('Error fetching data.')
 		}
-		
+
 		let resultsByResolution = {
 			'1h': data.filter((s) => s.resolution === '60'),
 			'3h': data.filter((s) => s.resolution === '180'),
@@ -43,8 +43,16 @@ const CompareResultsSelectStrategies = () => {
 		const desiredMinimumMarkerSize = 4
 
 		// Find max and min trade count values
-		const maxTradeCount = Math.max(...Object.values(results).flat().map((s) => s.tradeCount))
-		const minTradeCount = Math.min(...Object.values(results).flat().map((s) => s.tradeCount))
+		const maxTradeCount = Math.max(
+			...Object.values(results)
+				.flat()
+				.map((s) => s.tradeCount)
+		)
+		const minTradeCount = Math.min(
+			...Object.values(results)
+				.flat()
+				.map((s) => s.tradeCount)
+		)
 
 		if (maxTradeCount === minTradeCount) return Array(resultsByResolutions.length).fill((desiredMinimumMarkerSize + desiredMaximumMarkerSize) / 2)
 
@@ -58,64 +66,65 @@ const CompareResultsSelectStrategies = () => {
 		return markerSizes
 	}
 	let graphData = []
-	
-	results && Object.keys(results).forEach((key) => {
-		const filteredResults = results[key].filter((s) => s.outlierRemovalMethod === outlierRemovalMethod)
-		graphData.push({
-			x: filteredResults.map((s) => s.winRate),
-			y: filteredResults.map((s) => s.performance),
-			mode: 'markers+text',
-			name: key,
-			text: filteredResults.map((s) => s.tradeCount),
-			textfont: {
-				color: 'white',
-			},
-			customdata: filteredResults.map(
-				(s) => 
-					`=== Strategy: ${s.strategy} ===<br>` +
-					`${s.symbol} @ ${minutesToHours(s.resolution)}<br>` +
-					`${s.tradeCount.toFixed(0)} trades<br>` +
-					`win rate:____${(s.winRate * 100).toFixed(0)}%<br>` +
-					`performance:_${s.performance?.toFixed(2)}<br>` +
-					`profit B&H:__${s.buyAndHoldProfit?.toFixed(2)}<br>` +
-					`Profit tot:__${s.strategyProfit?.toFixed(2)}<br>` +
-					`   Profits stats<br>` +
-					`avg:______${s.tradeProfitAverage?.toFixed(2)}<br>` +
-					`std dev:__${((s.tradeProfitStdDeviation / s.tradeProfitAverage) * 100).toFixed(0)}%<br>` +
-					`norm:_____${s.tradeProfitNormality?.toFixed(2)}<br>` +
-					`skew:_____${s.tradeProfitSkewness?.toFixed(2)}<br>` +
-					`kurt:_____${s.tradeProfitKurtosis?.toFixed(0)}<br>`
-			),
-			marker: {
-				size: markerSize(filteredResults),
-				line: {
-					width: 0,
-					// color: filteredResults.map((f) => {
-					// 	if (f.buyAndHoldProfit < 1 && f.strategyProfit > 1) return 'white'
-					// 	// if (f.buyAndHoldProfit > 1 && f.strategyProfit < 1) return 'gray'
-					// 	else return 'none'
-					// })
+
+	results &&
+		Object.keys(results).forEach((key) => {
+			const filteredResults = results[key].filter((s) => s.outlierRemovalMethod === outlierRemovalMethod)
+			graphData.push({
+				x: filteredResults.map((s) => s.winRate),
+				y: filteredResults.map((s) => s.performance),
+				mode: 'markers+text',
+				name: key,
+				text: filteredResults.map((s) => s.tradeCount),
+				textfont: {
+					color: 'white',
 				},
-				symbol: filteredResults.map((f) => {
-					if (f.buyAndHoldProfit < 1 && f.strategyProfit < 1) return 'circle-open'
-					if (f.buyAndHoldProfit > 1 && f.strategyProfit < 1) return 'x-thin-open'
-					if (f.buyAndHoldProfit < 1 && f.strategyProfit > 1) return 'hexagram'
-					else return 'circle'
-				}),
-			},
-			hovertemplate: '%{customdata}',
-			hoverlabel: {
-				font: {
-					family: 'Monaco', // Specify the font family
-					// size: 12, // Specify the font size
-					// color: 'black' // Specify the font color
+				customdata: filteredResults.map(
+					(s) =>
+						`=== Strategy: ${s.strategy} ===<br>` +
+						`${s.symbol} @ ${minutesToHours(s.resolution)}<br>` +
+						`${s.tradeCount.toFixed(0)} trades<br>` +
+						`win rate:____${(s.winRate * 100).toFixed(0)}%<br>` +
+						`performance:_${s.performance?.toFixed(2)}<br>` +
+						`profit B&H:__${s.buyAndHoldProfit?.toFixed(2)}<br>` +
+						`Profit tot:__${s.strategyProfit?.toFixed(2)}<br>` +
+						`   Profits stats<br>` +
+						`avg:______${s.tradeProfitAverage?.toFixed(2)}<br>` +
+						`std dev:__${((s.tradeProfitStdDeviation / s.tradeProfitAverage) * 100).toFixed(0)}%<br>` +
+						`norm:_____${s.tradeProfitNormality?.toFixed(2)}<br>` +
+						`skew:_____${s.tradeProfitSkewness?.toFixed(2)}<br>` +
+						`kurt:_____${s.tradeProfitKurtosis?.toFixed(0)}<br>`
+				),
+				marker: {
+					size: markerSize(filteredResults),
+					line: {
+						width: 0,
+						// color: filteredResults.map((f) => {
+						// 	if (f.buyAndHoldProfit < 1 && f.strategyProfit > 1) return 'white'
+						// 	// if (f.buyAndHoldProfit > 1 && f.strategyProfit < 1) return 'gray'
+						// 	else return 'none'
+						// })
+					},
+					symbol: filteredResults.map((f) => {
+						if (f.buyAndHoldProfit < 1 && f.strategyProfit < 1) return 'circle-open'
+						if (f.buyAndHoldProfit > 1 && f.strategyProfit < 1) return 'x-thin-open'
+						if (f.buyAndHoldProfit < 1 && f.strategyProfit > 1) return 'hexagram'
+						else return 'circle'
+					}),
 				},
-			},
+				hovertemplate: '%{customdata}',
+				hoverlabel: {
+					font: {
+						family: 'Monaco', // Specify the font family
+						// size: 12, // Specify the font size
+						// color: 'black' // Specify the font color
+					},
+				},
+			})
 		})
-	})
 
 	var layout = {
-		uirevision:'true',
+		uirevision: 'true',
 		shapes: [
 			{
 				type: 'line',
@@ -192,7 +201,7 @@ const CompareResultsSelectStrategies = () => {
 				xref: 'x',
 				yref: 'paper',
 				font: { color: 'white' },
-                yshift: -20,
+				yshift: -20,
 			},
 			{
 				x: 0, // Position at the start of the x-axis
@@ -202,7 +211,7 @@ const CompareResultsSelectStrategies = () => {
 				xref: 'paper',
 				yref: 'y',
 				font: { color: 'white' },
-                xshift: -40,
+				xshift: -40,
 			},
 		]
 
@@ -216,7 +225,10 @@ const CompareResultsSelectStrategies = () => {
 	}
 
 	function selectStrategyIds() {
-		let strategies = strategyIdsInputRef.current?.replace(/\s+/g, '').split(',').map((s) => parseInt(s))
+		let strategies = strategyIdsInputRef.current
+			?.replace(/\s+/g, '')
+			.split(',')
+			.map((s) => parseInt(s))
 		if (!strategies || isNaN(strategies[0])) {
 			strategies = []
 		}
@@ -229,8 +241,8 @@ const CompareResultsSelectStrategies = () => {
 	}
 
 	return (
-		<div className='componentBase'>
-			<div className='toggles'>
+		<div className="componentBase">
+			<div className="toggles">
 				{/* <div>
 					Remove outliers results
 					<input type="checkbox" checked={removeOutlierResults} onChange={(e) => setRemoveOutlierResults(e.target.checked)} />
@@ -239,65 +251,50 @@ const CompareResultsSelectStrategies = () => {
 					Log scale
 					<input type="checkbox" checked={logScale} onChange={(e) => setLogScale(e.target.checked)} />
 				</div>
-				<div className='horizontalSelection'>
+				<div className="horizontalSelection">
 					Remove outlier trades
 					<div>
-						<input
-							type="radio"
-							id="option1"
-							checked={outlierRemovalMethod === OutlierRemovalMethods.None}
-							onChange={() => updateOutlierRemovalMethod(OutlierRemovalMethods.None)}
-						/>
+						<input type="radio" id="option1" checked={outlierRemovalMethod === OutlierRemovalMethods.None} onChange={() => updateOutlierRemovalMethod(OutlierRemovalMethods.None)} />
 						<label htmlFor="option1">none</label>
 					</div>
 					<div>
-						<input
-							type="radio"
-							id="option2"
-							checked={outlierRemovalMethod === OutlierRemovalMethods.StdDev3}
-							onChange={() => updateOutlierRemovalMethod(OutlierRemovalMethods.StdDev3)}
-						/>
+						<input type="radio" id="option2" checked={outlierRemovalMethod === OutlierRemovalMethods.StdDev3} onChange={() => updateOutlierRemovalMethod(OutlierRemovalMethods.StdDev3)} />
 						<label htmlFor="option2">StdDev3</label>
 					</div>
 					<div>
-						<input
-							type="radio"
-							id="option3"
-							checked={outlierRemovalMethod === OutlierRemovalMethods.StdDev4}
-							onChange={() => updateOutlierRemovalMethod(OutlierRemovalMethods.StdDev4)}
-						/>
+						<input type="radio" id="option3" checked={outlierRemovalMethod === OutlierRemovalMethods.StdDev4} onChange={() => updateOutlierRemovalMethod(OutlierRemovalMethods.StdDev4)} />
 						<label htmlFor="option3">StdDev4</label>
 					</div>
 				</div>
 				<div>
 					Select strategies
-					<input type="text" placeholder={strategyIdsInputRef.current} onChange={(e) => strategyIdsInputRef.current = e.target.value}/>
+					<input type="text" placeholder={strategyIdsInputRef.current} onChange={(e) => (strategyIdsInputRef.current = e.target.value)} />
 					<button onClick={selectStrategyIds}>Select</button>
 				</div>
 				<table>
 					<thead>
 						<tr>
-							<th ></th>
-							<th className='tableCell'>{'B&H > 1'}</th>
-							<th className='tableCell'>{'B&H < 1'}</th>
+							<th></th>
+							<th className="tableCell">{'B&H > 1'}</th>
+							<th className="tableCell">{'B&H < 1'}</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<th className='tableCell'>{'Profit < 1'}</th>
-							<td className='tableCell'> Ｘ</td>
-							<td className='tableCell'> ⃝</td>
+							<th className="tableCell">{'Profit < 1'}</th>
+							<td className="tableCell"> Ｘ</td>
+							<td className="tableCell"> ⃝</td>
 						</tr>
 						<tr>
-							<th className='tableCell'>{'Profit > 1'}</th>
-							<td className='tableCell'> ⚪️</td>
-							<td className='tableCell'> ⭐️</td>
+							<th className="tableCell">{'Profit > 1'}</th>
+							<td className="tableCell"> ⚪️</td>
+							<td className="tableCell"> ⭐️</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			{!results && <div className='loading'>Loading...</div>}
-			{warning && <div className='warning'>{warning}</div>}
+			{!results && <div className="loading">Loading...</div>}
+			{warning && <div className="warning">{warning}</div>}
 			<MyPlot
 				graphData={graphData}
 				layout={layout}

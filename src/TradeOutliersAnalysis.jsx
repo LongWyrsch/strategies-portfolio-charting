@@ -12,7 +12,7 @@ const TradeOutliersAnalysis = () => {
 		setIsLoading(true) // Start loading
 		let data = null
 		try {
-			const response = await fetch(`https://localhost:7248/api/CompareOutliers`)
+			const response = await fetch(`${import.meta.env.BACKEND_URL}/api/CompareOutliers`)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
 			data = await response.json()
@@ -77,7 +77,7 @@ const TradeOutliersAnalysis = () => {
 		paper_bgcolor: 'rgba(12,12,12,1)',
 		plot_bgcolor: 'rgba(12,12,12,1)',
 		// hovermode: 'y',
-		dragmode: false,	
+		dragmode: false,
 		// height: 300,
 		// width: 300,
 		margin: {
@@ -114,7 +114,7 @@ const TradeOutliersAnalysis = () => {
 							const plotTitle = `${t.symbol}, ${t.resolution}, strat. ${t.strategy}`
 							return (
 								<div key={i} className={styles.chart}>
-									<MyPlot graphData={getTrace(t)} layout={getLayout(t)} config={config} styles={{ width: '100%', height: '100%' }} logScale={true} plotTitle={plotTitle}/>
+									<MyPlot graphData={getTrace(t)} layout={getLayout(t)} config={config} styles={{ width: '100%', height: '100%' }} logScale={true} plotTitle={plotTitle} />
 								</div>
 							)
 						})}

@@ -33,7 +33,7 @@ const CompareStrategiesResults = () => {
 	const fetchData = async () => {
 		let data = null
 		try {
-			const response = await fetch(`https://localhost:7248/api/GetAllResultsByStrategyBoxPlot?strategies=${strategies}&symbols=${symbols}`)
+			const response = await fetch(`${import.meta.env.BACKEND_URL}/api/GetAllResultsByStrategyBoxPlot?strategies=${strategies}&symbols=${symbols}`)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
 			data = await response.json()
