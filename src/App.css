@@ -1,0 +1,60 @@
+#root {
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+}
+
+.componentBase {
+	display: flex;
+	height: 95vh;
+	flex-direction: column;
+	/* flex-grow: 1; */
+	padding: 0 15px 15px;
+}
+
+.warning {
+	font-size: 2rem;
+	color: orangered;
+	text-align: center;
+}
+
+input[type='checkbox'] {
+	width: 20px;
+	font-size: 1.2rem;
+	margin: 0 10px;
+	color: white;
+}
+
+.toggles {
+	display: flex;
+	align-items: center;
+	gap: 40px;
+}
+
+
+.chart {
+  border: 2px solid red !important;
+}
+
+.loading {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: yellow;
+	font-size: 3rem;
+	z-index: 1;
+}
+
+.horizontalSelection {
+	display: flex;
+	gap: 10px;
+	border: 1px solid rgb(97, 95, 95);
+	padding: 5px;
+}
+
+.tableCell {
+	text-align: center;
+	border: 1px solid gray;
+	font-size: 0.7rem;
+}

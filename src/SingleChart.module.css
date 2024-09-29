@@ -1,0 +1,52 @@
+.componentBase {
+	display: flex;
+	height: 150vh;
+	flex-direction: column;
+	flex-grow: 1;
+	padding: 0 15px 15px;
+}
+
+.input > input {
+    width: 100px;
+}
+
+.results {
+    height: 80px;
+}
+
+.strategyResults {
+	padding: 0 10px;
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+	font-size: 1rem;
+}
+
+.strategyResults > div {
+    font-size: 0.8rem;
+	display: flex;
+	gap: 10px;
+}
+
+.strategyResults > div > div:nth-child(even) {
+	text-align: right;
+}
+
+.title {
+	width: 100%;
+	text-align: center;
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+
+.smallCharts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	flex-grow: 1;
+}
+
+.smallPlot {
+    margin-top: 10px;
+    width: 40%;
+}
