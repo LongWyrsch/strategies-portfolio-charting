@@ -15,7 +15,7 @@ const CompareResultsSelectStrategies = () => {
 	const fetchData = async () => {
 		let data = null
 		try {
-			const response = await fetch(`${import.meta.env.BACKEND_URL}/api/GetSelectResults?strategyIds=${strategyIds.join(',')}`)
+			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/GetSelectResults?strategyIds=${strategyIds.join(',')}`)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
 			data = await response.json()

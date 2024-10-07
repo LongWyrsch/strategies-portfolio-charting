@@ -12,7 +12,7 @@ const TradeOutliersAnalysis = () => {
 		setIsLoading(true) // Start loading
 		let data = null
 		try {
-			const response = await fetch(`${import.meta.env.BACKEND_URL}/api/CompareOutliers`)
+			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/CompareOutliers`)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
 			data = await response.json()

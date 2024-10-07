@@ -13,13 +13,13 @@ const CompareStrategies = () => {
 	const [markerSizeParameters, setMarkerSizeParameters] = useState(null)
 	const strategiesRef = useRef(mainStrategies)
 	const [strategies, setStrategies] = useState(mainStrategies)
-	
+
 	let markerSize = () => {}
 
 	const fetchData = async () => {
 		let data = null
 		try {
-			const response = await fetch(`${import.meta.env.BACKEND_URL}/api/GetAllResultsByStrategy?outlierRemovalMethod=${outlierRemovalMethod}&strategies=${strategies}`)
+			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/GetAllResultsByStrategy?outlierRemovalMethod=${outlierRemovalMethod}&strategies=${strategies}`)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
 			data = await response.json()
@@ -53,7 +53,6 @@ const CompareStrategies = () => {
 			minWinRate,
 		})
 	}
-	
 
 	markerSize = (resultsByResolutions) => {
 		// destructure markerSizeParameters
@@ -223,10 +222,9 @@ const CompareStrategies = () => {
 		let inputStrategies = extractStrategies(strategiesRef.current)
 		if (!inputStrategies || isNaN(inputStrategies[0])) {
 			setStrategies(mainStrategies)
-		}	
-		else{
+		} else {
 			setStrategies(inputStrategies)
-		} 
+		}
 	}
 	return (
 		<div className="componentBase">
@@ -269,11 +267,19 @@ const CompareStrategies = () => {
 				</div>
 				<div>
 					Isolate strategies
-					<input type="text" placeholder="12, 25, ..." onChange={(e) => strategiesRef.current = e.target.value } />
+					<input type="text" placeholder="12, 25, ..." onChange={(e) => (strategiesRef.current = e.target.value)} />
 					<button onClick={isolate}>Isolate</button>
 				</div>
 			</div>
-			<MyPlot graphData={graphData} layout={layout} config={config} logScale={logScale} plotUnhoverHandler={plotUnhoverHandler} plotHoverHandler={plotHoverHandler} plotTitle={'Avg performance for all symbols, by strategies'}/>
+			<MyPlot
+				graphData={graphData}
+				layout={layout}
+				config={config}
+				logScale={logScale}
+				plotUnhoverHandler={plotUnhoverHandler}
+				plotHoverHandler={plotHoverHandler}
+				plotTitle={'Avg performance for all symbols, by strategies'}
+			/>
 		</div>
 	)
 }

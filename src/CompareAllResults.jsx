@@ -20,7 +20,7 @@ const CompareAllResults = () => {
 	const fetchData = async () => {
 		let data = null
 		try {
-			const response = await fetch(`${import.meta.env.BACKEND_URL}/api/GetResultsForStrategies?strategies=${strategies}&symbols=${symbols}&outlierRemovalMethod=${outlierRemovalMethod}`)
+			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/GetResultsForStrategies?strategies=${strategies}&symbols=${symbols}&outlierRemovalMethod=${outlierRemovalMethod}`)
 			if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`)
 
 			data = await response.json()

@@ -33,7 +33,7 @@ const SingleChart = () => {
 		let data = null
 		try {
 			const response = await fetch(
-				`${import.meta.env.BACKEND_URL}/api/GetChartTradingDetails?symbol=${adjustedSymbol}&resolution=${adjustedResolution}&strategy=${
+				`${import.meta.env.VITE_BACKEND_URL}/api/GetChartTradingDetails?symbol=${adjustedSymbol}&resolution=${adjustedResolution}&strategy=${
 					strategyRef.current
 				}&outlierRemovalMethod=${outlierRemovalMethod}`
 			)
