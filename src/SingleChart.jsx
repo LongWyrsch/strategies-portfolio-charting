@@ -167,7 +167,7 @@ const SingleChart = () => {
 	return (
 		<div className={styles.componentBase}>
 			<div className={styles.input}>
-				<input type="text" placeholder="ETH" onChange={(e) => (symbolRef.current = e.target.value)} />
+				<input type="text" placeholder="ADA" onChange={(e) => (symbolRef.current = e.target.value)} />
 				<input type="text" placeholder="720" onChange={(e) => (resolutionRef.current = e.target.value)} />
 				<input type="text" placeholder="1" onChange={(e) => (strategyRef.current = e.target.value)} />
 				<button onClick={fetchData}>fetchData</button>

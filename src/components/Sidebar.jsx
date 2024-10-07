@@ -10,7 +10,7 @@ const Sidebar = () => {
 	return (
 		<>
 			<button className={styles.toggleButton} onClick={toggleSidebar}>
-				☰
+				Chart selection
 			</button>
             <div className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
 				<nav>

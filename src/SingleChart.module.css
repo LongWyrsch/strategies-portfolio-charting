@@ -10,6 +10,10 @@
     width: 100px;
 }
 
+.input > button {
+	color: antiquewhite;
+}
+
 .results {
     height: 80px;
 }
