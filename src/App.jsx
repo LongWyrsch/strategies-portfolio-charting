@@ -19,6 +19,7 @@ function App() {
 			<Sidebar />
 			{/* <Navbar /> */}
 			<Routes>
+				<Route path="/" element={<SingleChart />} />
 				<Route path="/singleChart" element={<SingleChart />} />
 				<Route path="/compareStrategies" element={<CompareStrategies />} />
 				<Route path="/compareStrategiesSingleSymbol" element={<CompareStrategiesSingleSymbol />} />
